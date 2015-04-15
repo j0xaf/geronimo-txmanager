@@ -120,17 +120,21 @@ public class XidImpl implements Xid, Serializable {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("[Xid:globalId=");
-        for (int i = 0; i < globalId.length; i++) {
-            s.append(Integer.toHexString(globalId[i]));
-        }
+        appendByteArray(s, globalId);
         s.append(",length=").append(globalId.length);
         s.append(",branchId=");
-        for (int i = 0; i < branchId.length; i++) {
-            s.append(Integer.toHexString(branchId[i]));
-        }
+        appendByteArray(s, branchId);
         s.append(",length=");
         s.append(branchId.length);
         s.append("]");
         return s.toString();
+    }
+
+    final private static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    public static void appendByteArray(StringBuilder s, byte[] bytes) {
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            s.append(hexArray[v >>> 4]).append(hexArray[v & 0x0F]);
+        }
     }
 }
